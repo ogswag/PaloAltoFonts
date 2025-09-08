@@ -1,0 +1,189 @@
+# ------------------------------------------------------------------------------------------------------------------
+
+[buildPlans.PaloAlto]
+family = "Palo Alto"
+spacing = "normal"
+serifs = "sans"
+noCvSs = false
+exportGlyphNames = true
+
+[buildPlans.PaloAlto.namingOverride]
+	copyright = 'Copyright 2025-{{currentYear}}, Renzhi Li (aka. Belleve Invis, belleve@typeof.net). Custom version made by Alexander Zakharov (github.com/ogswag)'
+	licence = '''This font software is licenced under the SIL Open Font Licence, Version 1.1. This licence is available with a FAQ at: http://scripts.sil.org/OFL. This font software is distributed on an 'AS IS' basis, without warranties or conditions of any kind, either express or implied. See the SIL Open Font licence for the specific language, permissions and limitations governing your use of this font software.'''
+	manufacturer = 'Belleve Invis (Iosevka), Alexander Zakharov (Palo Alto)'
+	designer = 'Belleve Invis (Iosevka), Alexander Zakharov (Palo Alto)'
+	urlVendor = 'https://github.com/ogswag/PaloAltoFonts'
+	urlDesigner = 'https://github.com/ogswag/PaloAltoFonts'
+	description = 'Palo Alto is a font family designed to closely match Apple’s SF Mono, with subtle adjustments made according to my taste.'
+
+[buildPlans.PaloAlto.variants.design]
+one = "base"
+two = "straight-neck-serifless"
+five = "upright-arched-serifless"
+eight = "two-circles"
+zero = "oval-slashed"
+capital-g = "toothless-rounded-serifless-hooked"
+capital-j = "serifed"
+capital-q = "crossing"
+capital-w = "straight-vertical-sides-serifless"
+f = "flat-hook-serifless-crossbar-at-x-height"
+j = "flat-hook-serifed"
+r = "hookless-serifed"
+t = "flat-hook-short-neck"
+w = "straight-flat-top-serifless"
+y = "straight-turn-serifless"
+capital-eszet = "flat-top-serifless"
+long-s = "flat-hook-serifless"
+eszet = "traditional-serifless"
+capital-gamma = "serifed"
+lower-kappa = "curly-top-right-serifed"
+capital-lambda = "straight-base-serifed"
+lower-lambda = "straight-turn"
+lower-chi = "semi-chancery-straight-serifless"
+cyrl-capital-ka = "symmetric-touching-serifless"
+cyrl-ka = "symmetric-touching-serifless"
+cyrl-capital-u = "straight-turn-serifless"
+cyrl-u = "straight-turn-serifless"
+asterisk = "hex-mid"
+brace = "straight"
+guillemet = "straight"
+number-sign = "slanted"
+at = "fourfold-solid-inner"
+cent = "open-cap"
+percent = "rings-continuous-slash"
+lig-neq = "more-slanted"
+lig-equal-chain = "without-notch"
+lig-hyphen-chain = "without-notch"
+
+[buildPlans.PaloAlto.variants.italic]
+capital-z = "cursive"
+j = "diagonal-tailed-serifed"
+l = "serifed-diagonal-tailed"
+t = "diagonal-tailed-short-neck"
+u = "toothed-bottom-right-serifed"
+x = "cursive"
+z = "cursive"
+
+
+[buildPlans.PaloAlto.ligations]
+		inherits = "swift"
+		enables = [
+			"arrow-l", # Left-pointing arrows.
+			"arrow-r", # Right-pointing arrows.
+			"arrow-hyphen", # Arrows using hyphen-minus (-) as the rod.
+			"arrow-equal", # Arrows using equal sign (=) as the rod.
+			"lteq-separate",                   # lteq-separate: Display <= as separate shape.
+			"eqlt-separate",                   # eqlt-separate: Display =< as separate shape.
+			"gteq-separate",                   # gteq-separate: Display >= as separate shape.
+			"brst",                            # center asterisk in (* and *).
+			"slash-asterisk",                  # Shift asterisk in /* and */.
+			"center-ops",                      # Vertically align some of the operators (like *) to the center position it is before or after a "center" operator (like +).
+			"center-op-trigger-plus-minus-l",  # Plus (+) and Minus (-) will trigger other operator characters at left to be centered.
+			"center-op-trigger-plus-minus-r",  # Plus (+) and Minus (-) will trigger other operator characters at right to be centered.
+			"center-op-trigger-equal-l",       # Equal (=) will trigger other operator characters at left to be centered.
+			"center-op-trigger-equal-r",       # Equal (=) will trigger other operator characters at right to be centered.
+			"center-op-influence-colon",       # Treat colon (:) as operator and perform chained centering.
+			"llgg",                            # Enable ligation for <<, >> and other angle-bracket chaining.
+			"llggeq",                          # Enable ligation for <<=, >>= as shift operator.
+			"minus-minus-minus",                # Make 3 or more contiguous hyphen-minuses (like --- and ----) connected as a straight solid line.
+			"underscore-underscore-underscore", # Make 3 or more contiguous underscores (like ___ and ____) connected.
+			"eqeqeq",                           # Enable special ligation for === with triple lines.
+			"hash-hash-hash",                   # Make 3 or more contiguous hash signs (number signs) (like ## and ###) connected.
+		]
+		disables = [
+			"eqeq",                             # Enable ligation for == and ===.
+			"lteq",                             # Enable ligation for <= as less-than-or-equal sign.
+			"eqlt",                             # Enable ligation for =< as less-than-or-equal sign.
+			"gteq",                             # Enable ligation for >= as greater-than-or-equal sign.
+			"kern-dotty",                       # Move connecting dotty punctuations closer, like for ::, ::: and ...
+			"kern-bars",                        # Move consecutive bars closer, like for ||, ||| and //.
+			"plus-plus",                        # Make 2 or more contiguous plus signs (like ++, +++ and ++++) connected..
+			"plus-plus-plus",                   # Make 3 or more contiguous plus signs (like +++ and ++++) connected..
+		]
+
+[buildPlans.PaloAlto.weights.Regular]
+shape = 415 # default = 400
+menu = 400
+css = 400
+
+[buildPlans.PaloAlto.weights.Bold]
+shape = 750 # default = 700
+menu = 700
+css = 700
+
+[buildPlans.PaloAlto.widths.Normal]
+shape = 620   # default = 600
+menu = 5
+css = "normal"
+
+[buildPlans.PaloAlto.slopes.Upright]
+angle = 0
+shape = "upright"
+menu = "upright"
+css = "normal"
+
+[buildPlans.PaloAlto.slopes.Italic]
+angle = 12.4
+shape = "italic"
+menu = "italic"
+css = "italic"
+
+
+# ------------------------------------------------------------------------------------------------------------------
+
+[buildPlans.PaloAltoTerminal]
+family = "Palo Alto Terminal"
+spacing = "terminal"
+serifs = "sans"
+noCvSs = false
+exportGlyphNames = true
+
+[buildPlans.PaloAltoTerminal.namingOverride]
+	copyright = 'Copyright 2025-{{currentYear}}, Renzhi Li (aka. Belleve Invis, belleve@typeof.net). Custom version made by Alexander Zakharov (github.com/ogswag)'
+	licence = '''This font software is licenced under the SIL Open Font Licence, Version 1.1. This licence is available with a FAQ at: http://scripts.sil.org/OFL. This font software is distributed on an 'AS IS' basis, without warranties or conditions of any kind, either express or implied. See the SIL Open Font licence for the specific language, permissions and limitations governing your use of this font software.'''
+	manufacturer = 'Belleve Invis (Iosevka), Alexander Zakharov (Palo Alto)'
+	designer = 'Belleve Invis (Iosevka), Alexander Zakharov (Palo Alto)'
+	urlVendor = 'https://github.com/ogswag/PaloAltoFonts'
+	urlDesigner = 'https://github.com/ogswag/PaloAltoFonts'
+	description = 'Palo Alto is a font family designed to closely match Apple’s SF Mono, with subtle adjustments made according to my taste.'
+
+[buildPlans.PaloAltoTerminal.ligations]
+		inherits = "swift"
+		enables = [
+			"arrow-l", # Left-pointing arrows.
+			"arrow-r", # Right-pointing arrows.
+			"arrow-hyphen", # Arrows using hyphen-minus (-) as the rod.
+			"arrow-equal", # Arrows using equal sign (=) as the rod.
+			"lteq-separate",                   # lteq-separate: Display <= as separate shape.
+			"eqlt-separate",                   # eqlt-separate: Display =< as separate shape.
+			"gteq-separate",                   # gteq-separate: Display >= as separate shape.
+			"brst",                            # center asterisk in (* and *).
+			"slash-asterisk",                  # Shift asterisk in /* and */.
+			"center-ops",                      # Vertically align some of the operators (like *) to the center position it is before or after a "center" operator (like +).
+			"center-op-trigger-plus-minus-l",  # Plus (+) and Minus (-) will trigger other operator characters at left to be centered.
+			"center-op-trigger-plus-minus-r",  # Plus (+) and Minus (-) will trigger other operator characters at right to be centered.
+			"center-op-trigger-equal-l",       # Equal (=) will trigger other operator characters at left to be centered.
+			"center-op-trigger-equal-r",       # Equal (=) will trigger other operator characters at right to be centered.
+			"center-op-influence-colon",       # Treat colon (:) as operator and perform chained centering.
+			"llgg",                            # Enable ligation for <<, >> and other angle-bracket chaining.
+			"llggeq",                          # Enable ligation for <<=, >>= as shift operator.
+			"minus-minus-minus",                # Make 3 or more contiguous hyphen-minuses (like --- and ----) connected as a straight solid line.
+			"underscore-underscore-underscore", # Make 3 or more contiguous underscores (like ___ and ____) connected.
+			"eqeqeq",                           # Enable special ligation for === with triple lines.
+			"hash-hash-hash",                   # Make 3 or more contiguous hash signs (number signs) (like ## and ###) connected.
+		]
+		disables = [
+			"eqeq",                             # Enable ligation for == and ===.
+			"lteq",                             # Enable ligation for <= as less-than-or-equal sign.
+			"eqlt",                             # Enable ligation for =< as less-than-or-equal sign.
+			"gteq",                             # Enable ligation for >= as greater-than-or-equal sign.
+			"kern-dotty",                       # Move connecting dotty punctuations closer, like for ::, ::: and ...
+			"kern-bars",                        # Move consecutive bars closer, like for ||, ||| and //.
+			"plus-plus",                        # Make 2 or more contiguous plus signs (like ++, +++ and ++++) connected..
+			"plus-plus-plus",                   # Make 3 or more contiguous plus signs (like +++ and ++++) connected..
+		]
+
+variants.inherits = "buildPlans.PaloAlto"
+weights.inherits = "buildPlans.PaloAlto"
+widths.inherits = "buildPlans.PaloAlto"
+slopes.inherits = "buildPlans.PaloAlto"
