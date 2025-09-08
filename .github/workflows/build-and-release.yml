@@ -1,0 +1,189 @@
+# GitHub Actions Workflow for Building Iosevka Font with Nerd Fonts Patches
+# This workflow builds the Iosevka font using your PaloAlto.toml config,
+# patches it with Nerd Fonts symbols, and creates releases on tag push.
+
+name: Build and Release PaloAlto Font
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.0, v2.1.3, etc.
+  workflow_dispatch:  # Allows manual triggering
+
+permissions:
+  contents: write  # Required for creating releases and uploading assets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ttfautohint fontforge python3-fontforge
+          
+      - name: Clone Iosevka repository
+        run: |
+          git clone --depth 1 https://github.com/be5invis/Iosevka.git iosevka-build
+          cd iosevka-build
+          
+      - name: Install Iosevka dependencies
+        run: |
+          cd iosevka-build
+          npm install
+          
+      - name: Copy build plan to Iosevka directory
+        run: |
+          # Copy your PaloAlto.toml to the Iosevka build directory as private-build-plans.toml
+          cp PaloAlto.toml iosevka-build/private-build-plans.toml
+          
+      - name: Build Iosevka font
+        run: |
+          cd iosevka-build
+          # Extract the plan name from your toml file (assuming it's formatted like [buildPlans.planname])
+          PLAN_NAME=$(grep -o '\[buildPlans\.\([^]]*\)\]' ../PaloAlto.toml | head -1 | sed 's/\[buildPlans\.\(.*\)\]/\1/')
+          echo "Building font plan: $PLAN_NAME"
+          
+          # Build TTF fonts (you can also use 'ttf-unhinted' for faster builds)
+          npm run build -- ttf::$PLAN_NAME
+          
+          # Create output directory
+          mkdir -p ../font-output/original
+          
+          # Copy built fonts to output directory
+          cp dist/$PLAN_NAME/TTF/*.ttf ../font-output/original/
+          
+      - name: Clone Nerd Fonts repository
+        run: |
+          git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git nerd-fonts-patcher
+          
+      - name: Patch fonts with Nerd Fonts symbols
+        run: |
+          cd nerd-fonts-patcher
+          
+          # Create output directories
+          mkdir -p ../font-output/nerd-patched
+          mkdir -p ../font-output/nerd-complete
+          
+          # Patch each font file with Powerline symbols only
+          for font_file in ../font-output/original/*.ttf; do
+            filename=$(basename "$font_file" .ttf)
+            echo "Patching $filename with Powerline symbols..."
+            fontforge -script font-patcher --powerline --no-progressbars "$font_file" -out ../font-output/nerd-patched/
+          done
+          
+          # Patch each font file with complete Nerd Fonts symbol set
+          for font_file in ../font-output/original/*.ttf; do
+            filename=$(basename "$font_file" .ttf)
+            echo "Patching $filename with complete Nerd Fonts..."
+            fontforge -script font-patcher --complete --no-progressbars "$font_file" -out ../font-output/nerd-complete/
+          done
+          
+      - name: Create font packages
+        run: |
+          # Create directories for packaging
+          mkdir -p packages
+          
+          # Package original fonts
+          cd font-output/original
+          zip -r ../../packages/PaloAlto-Original-Fonts.zip *.ttf
+          cd ../..
+          
+          # Package Nerd Fonts Powerline version
+          cd font-output/nerd-patched
+          zip -r ../../packages/PaloAlto-Nerd-Fonts-Powerline.zip *.ttf
+          cd ../..
+          
+          # Package complete Nerd Fonts version
+          cd font-output/nerd-complete
+          zip -r ../../packages/PaloAlto-Nerd-Fonts-Complete.zip *.ttf
+          cd ../..
+          
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
+          
+          # Create release notes
+          cat > RELEASE_NOTES.md << EOF
+          # PaloAlto Font Release $TAG_NAME
+          
+          This release contains the PaloAlto font built from your custom Iosevka configuration.
+          
+          ## What's included:
+          
+          ### 📁 PaloAlto-Original-Fonts.zip
+          - Original Iosevka fonts built with your PaloAlto.toml configuration
+          - Pure Iosevka without any additional symbols
+          
+          ### ⚡ PaloAlto-Nerd-Fonts-Powerline.zip  
+          - PaloAlto fonts patched with Powerline symbols
+          - Perfect for terminal use with Powerline-enabled shells
+          - Includes arrows, branch symbols, and other common terminal icons
+          
+          ### 🎨 PaloAlto-Nerd-Fonts-Complete.zip
+          - PaloAlto fonts patched with the complete Nerd Fonts icon set
+          - Includes 10,000+ glyphs from Font Awesome, Material Design Icons, Weather Icons, and more
+          - Best for development environments and editors that support Nerd Fonts
+          
+          ## Installation:
+          
+          1. Download the package that suits your needs
+          2. Extract the zip file
+          3. Install the .ttf files by double-clicking them (Windows/macOS) or copying to ~/.local/share/fonts/ (Linux)
+          4. Restart your terminal/editor to use the new fonts
+          
+          ## Configuration Examples:
+          
+          ### VS Code settings.json:
+          \`\`\`json
+          {
+            "editor.fontFamily": "PaloAlto Nerd Font",
+            "terminal.integrated.fontFamily": "PaloAlto Nerd Font"
+          }
+          \`\`\`
+          
+          ### Terminal configurations:
+          - **iTerm2**: Preferences → Profiles → Text → Font
+          - **Windows Terminal**: Settings → Profiles → Appearance → Font face
+          - **GNOME Terminal**: Preferences → Profiles → Text → Custom font
+          
+          ---
+          
+          Built with ❤️ using [Iosevka](https://github.com/be5invis/Iosevka) and [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
+          EOF
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release_notes.outputs.TAG_NAME }}
+          name: PaloAlto Font ${{ steps.release_notes.outputs.TAG_NAME }}
+          body_path: RELEASE_NOTES.md
+          draft: false
+          prerelease: false
+          files: |
+            packages/*.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()  # Upload artifacts even if release fails
+        with:
+          name: font-packages-${{ steps.release_notes.outputs.TAG_NAME }}
+          path: |
+            packages/*.zip
+            font-output/*/
+          retention-days: 30
