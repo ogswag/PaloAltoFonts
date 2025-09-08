@@ -20,17 +20,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
           
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ttfautohint fontforge python3-fontforge
+          sudo apt-get install -y ttfautohint fontforge python3-fontforge nodejs npm
           
       - name: Clone Iosevka repository
         run: |
@@ -72,14 +66,14 @@ jobs:
           cd nerd-fonts-patcher
           
           # Create output directories
-          mkdir -p ../font-output/nerd-patched
+          mkdir -p ../font-output/nerd-pl
           mkdir -p ../font-output/nerd-complete
           
           # Patch each font file with Powerline symbols only
           for font_file in ../font-output/original/*.ttf; do
             filename=$(basename "$font_file" .ttf)
             echo "Patching $filename with Powerline symbols..."
-            fontforge -script font-patcher --powerline --no-progressbars "$font_file" -out ../font-output/nerd-patched/
+            fontforge -script font-patcher --powerline --no-progressbars "$font_file" -out ../font-output/nerd-pl/
           done
           
           # Patch each font file with complete Nerd Fonts symbol set
@@ -100,7 +94,7 @@ jobs:
           cd ../..
           
           # Package Nerd Fonts Powerline version
-          cd font-output/nerd-patched
+          cd font-output/nerd-pl
           zip -r ../../packages/PaloAlto-Nerd-Fonts-Powerline.zip *.ttf
           cd ../..
           
